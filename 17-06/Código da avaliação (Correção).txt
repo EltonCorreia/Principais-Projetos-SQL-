@@ -1,0 +1,56 @@
+use master
+
+drop database Empregado_Secoes
+
+create database Empregado_Secoes
+
+use Empregado_Secoes;
+
+CREATE TABLE Secao (
+Numsec INT NOT NULL,
+Nome VARCHAR(60) NOT NULL,
+Cidade VARCHAR(60) NOT NULL,
+PRIMARY KEY (Numsec)
+);
+
+CREATE TABLE Empregado (
+Numemp INT NOT NULL,
+Nome VARCHAR(60) NOT NULL,
+Numsec INT NOT NULL,
+Cargo VARCHAR(60) NOT NULL,
+Chefe VARCHAR(60) NOT NULL,
+Salario INT NOT NULL,
+Comissao INT NOT NULL,
+PRIMARY KEY (Numemp),
+FOREIGN KEY (Numsec) REFERENCES Secao(Numsec)
+);
+
+insert into Empregado (Numemp,Nome,Numsec,Cargo,Chefe,Salario,Comissao) values
+(1,'Ana Maria de Souza',10,'Contadora','Alfredo Campos',1000,100),
+(2,'Beatriz de Lima',20,'Desenvolvedora','Dolores Almeida',2000,200),
+(3,'Caique Souza',30,'Engenheiro','Alfredo Campos',3000,300),
+(4,'Danilo Sortido',40,'Designer','Dolores Almeida',4000,400),
+(5,'Patrick Agosto',40,'Presidente','',5000,500);
+
+
+insert into Secao (Numsec,Nome,Cidade) values
+(10,'Contabilidade','Campinas'),
+(20,'Desenvolvimento de sistemas','Santos'),
+(30,'Engenharia','Diadema'),
+(40,'Design','Campinas');
+
+--1. Mostre os nomes de todas as secoes que ficam em Campinas.
+
+select * from Secao where Cidade = 'Campinas'; 
+
+--2. Mostre o nome, cargo e numero de secao dos empregados que trabalham nas secoes 20, 30 e 40.
+
+select Nome,Cargo,Numsec from Empregado where Numsec in (20,30,40);
+
+--3. Para cada secao, mostre o numero de secao, total de empregados e total dos salarios (Salario mais Comissao).
+
+select Numsec, count(*), sum(Salario+Comissao) from Empregado group by Numsec;
+
+--4. Mostre qual o salario medio de todos os cargos, exceto o de presidente.
+
+select avg(Salario) as 'Media dos salarios' from Empregado where cargo! = 'Presidente' group by Cargo;
